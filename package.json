@@ -1,0 +1,25 @@
+{
+  "name": "aws-nodejs-images-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sewemark/aws-nodejs-images-app.git"
+  },
+  "author": "Seweryn Markowic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sewemark/aws-nodejs-images-app/issues"
+  },
+  "homepage": "https://github.com/sewemark/aws-nodejs-images-app#readme",
+  "accessKeyId": "AKIAJWMKWOHSHPFJ7XAQ",
+  "secretAccessKey": "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",
+  "region": "us-east-2",
+  "dependencies": {
+    "aws-sdk": "^2.95.0"
+  }
+}
