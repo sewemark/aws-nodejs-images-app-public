@@ -20,6 +20,7 @@
   "secretAccessKey": "hH23Qzc+Ar1Movd+bzQdUS+UMLQKCy+Cc047gLJD",
   "region": "us-east-2",
   "dependencies": {
-    "aws-sdk": "^2.95.0"
+    "aws-sdk": "^2.95.0",
+    "express": "^4.15.4"
   }
 }

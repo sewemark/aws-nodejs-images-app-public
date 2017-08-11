@@ -2,6 +2,7 @@
  * Created by sew on 2017-08-10.
  */
 var AWS = require('aws-sdk');
+var config = require('./config');
 // Load credentials and set region from JSON file
 AWS.config.loadFromPath('./config.json');
 
@@ -16,3 +17,10 @@ s3.listBuckets(function(err, data) {
         console.log("Bucket List", data.Buckets);
     }
 });
+
+var express = require('express');
+
+
+var app = express();
+
+app.use(express.static(__dirname + '/views'));
