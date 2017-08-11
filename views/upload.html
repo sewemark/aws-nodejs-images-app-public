@@ -2,10 +2,70 @@
 <html>
 <head>
 <title>Upload File</title>
+    <script>
+
+        var getCredentialForFileUrl = '/getCredentialForFile';
+        window.onload = function () {
+            init();
+        };
+        var init = function() {
+            var fileInput = document.getElementById('file_input');
+            var button = document.getElementById('submitt-button')
+            var file = fileInput.files[0];
+            var filename = file.name;
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                var file = fileInput.files[0];
+                if (file !== undefined && file !== null) {
+                    var filename = file.name;
+                    getCredentialForFile(filename, function (result) {
+                        console.log(result);
+                        document.getElementById("key").value = result.params.key;
+                        document.getElementById("acl").value = result.params.acl;
+                        document.getElementById("success_action_status").value = result.params.success_action_status;
+                        document.getElementById("policy").value = result.params.policy;
+                        document.getElementById("x-amz-algorithm").value = result.params["x-amz-algorithm"];
+                        document.getElementById("x-amz-credential").value = result.params["x-amz-credential"];
+                        document.getElementById("x-amz-date").value = result.params["x-amz-date"];
+                        document.getElementById("x-amz-signature").value = result.params["x-amz-signature"];
+                        uploadToS3(result);
+                    });
+                } else {
+                    console.log("first upload file");
+                }
+            }, false);
+        }
+
+        function uploadToS3(result) {
+            var form = document.getElementById("uploadForm");
+            var formData = new FormData(form);
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    var responseDoc = xhr.responseXML;
+                }
+            };
+            xhr.open('POST', result.upload_url, true);
+            xhr.send(formData);
+        }
+
+        function getCredentialForFile (filename, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = xhr.responseText;
+                    response = JSON.parse(response);
+                    callback(response);
+                }
+            };
+            xhr.open("GET", getCredentialForFileUrl + "?filename=" + filename, true);
+            xhr.send();
+        }
+    </script>
 </head>
 <body>
 <p>S3 Upload</p>
-<form id="myform">
+<form id="uploadForm">
     <input type="hidden" id="key" name="key">
     <input type="hidden" id="acl" name="acl">
     <input type="hidden" id="success_action_status" name="success_action_status">
@@ -16,7 +76,7 @@
     <input type="hidden" id="x-amz-signature" name="x-amz-signature">
 
     <input id="file_input" type="file" name="file" />
-    <input type="submit" name="btn_submit" id="btn_submit">
+    <input type="submit" name="btn_submit" id="submitt-button">
     </form>
     </body>
 </html>body>

@@ -24,7 +24,10 @@ var express = require('express');
 var app = express();
 
 app.use(express.static(__dirname + '/views'));
-
+app.get('/getCredentialForFile',function (req,res) {
+    console.log("uploading");
+    config.log(req.query.filename);
+})
 var server = app.listen(55555, function() {
     console.log('Node app is running on port: ' + server.address().port);
 });
