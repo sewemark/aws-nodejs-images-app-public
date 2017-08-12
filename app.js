@@ -18,16 +18,31 @@ s3.listBuckets(function(err, data) {
         console.log("Error", err);
     } else {
         console.log("Bucket List", data.Buckets);
+
     }
 });
+var params = {
+    Bucket: 'sewemarkbucket',
+    Delimiter: '',
+    Prefix: ''
+}
 
+s3.listObjects(params, function (err, data) {
+    if(err)throw err;
+     var data = (data.Contents);
+     //console.log(data);
+     var mapped =data.map(function (item) {
+         return item.Key;
+     })
+    console.log(mapped);
+});
 var express = require('express');
 
 
 var app = express();
 
 app.use(express.static(__dirname + '/views'));
-app.get('/getCredentialForFile',function (request,res) {
+app.get('/getCredentialForFile',function (request,response) {
     console.log("uploading");
     if (request.query.filename !== undefined && request.query.filename !== null) {
         var filename = uuid.v4() + path.extname(request.query.filename);
