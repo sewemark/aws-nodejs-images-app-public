@@ -11,7 +11,10 @@
         var init = function() {
             var fileInput = document.getElementById('file_input');
             var button = document.getElementById('submitt-button')
+
+            console.log(fileInput);
             var file = fileInput.files[0];
+            console.log(file);
             var filename = file.name;
             button.addEventListener('click', function(event) {
                 event.preventDefault();
@@ -75,9 +78,9 @@
     <input type="hidden" id="x-amz-date" name="x-amz-date">
     <input type="hidden" id="x-amz-signature" name="x-amz-signature">
 
-    <input id="file_input" type="file" name="file" />
+    <input id="file_input" type="file" name="file" >
     <input type="submit" name="btn_submit" id="submitt-button">
     </form>
     </body>
-</html>body>
+</html>
 </html>
