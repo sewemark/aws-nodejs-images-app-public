@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,13 +13,10 @@
 		console.log(fileInput);
 
             var button = document.getElementById('submitt-button')
-  //          var file = fileInput.files[0];
-//            var filename = file.name;
+            var file = fileInput.file
+            var filename = file.name;
             button.addEventListener('click', function(event) {
-           
-			var file = fileInput.files[0];
-				var filename = file.name;
-	        event.preventDefault();
+                event.preventDefault();
                 var file = fileInput.files[0];
                 if (file !== undefined && file !== null) {
                     var filename = file.name;
