@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,14 +11,15 @@
         };
         var init = function() {
             var fileInput = document.getElementById('file_input');
+		console.log(fileInput);
+
             var button = document.getElementById('submitt-button')
 
-            console.log(fileInput);
-            var file = fileInput.files[0];
-            console.log(file);
-            var filename = file.name;
             button.addEventListener('click', function(event) {
-                event.preventDefault();
+           
+			var file = fileInput.files[0];
+				var filename = file.name;
+	        event.preventDefault();
                 var file = fileInput.files[0];
                 if (file !== undefined && file !== null) {
                     var filename = file.name;
@@ -83,4 +85,4 @@
     </form>
     </body>
 </html>
-</html>
+
