@@ -6,6 +6,7 @@ var config = require('./config');
 var crypto = require('crypto');
 var uuid = require('node-uuid');
 var path = require('path');
+var bodyParser = require('body-parser')
 // Load credentials and set region from JSON file
 AWS.config.loadFromPath('./package.json');
 
@@ -27,21 +28,49 @@ var params = {
     Prefix: ''
 }
 
-s3.listObjects(params, function (err, data) {
-    if(err)throw err;
-     var data = (data.Contents);
-     //console.log(data);
-     var mapped =data.map(function (item) {
-         return item.Key;
-     })
-    console.log(mapped);
-});
+
 var express = require('express');
 
 
 var app = express();
-
+app.use(bodyParser());
+app.use(bodyParser.json());
+app.set('view engine', 'pug')
 app.use(express.static(__dirname + '/views'));
+app.get('/files', function (req, res) {
+    s3.listObjects(params, function (err, data) {
+        if(err)throw err;
+        var data = (data.Contents);
+        //console.log(data);
+        var mapped =data.map(function (item) {
+            return item.Key;
+        })
+        console.log(mapped);
+        res.render('files', { title: 'Hey', message: 'Hello there!', files: mapped })
+    });
+
+})
+var sqs = new AWS.SQS({region:'us-east-2'});
+
+app.post('/sendSQS',function (reqest,response) {
+    console.log(reqest.body);
+    var files = reqest.body;
+
+    console.log(files.length);
+    var sqsParams = {
+        MessageBody: JSON.stringify(files),
+        QueueUrl: '	https://sqs.us-east-2.amazonaws.com/810664644484/sewemarkMessageQueue'
+    };
+
+    sqs.sendMessage(sqsParams, function(err, data) {
+        if (err) {
+            console.log('ERR', err);
+        }
+
+        console.log(data);
+    });
+    response.send('OK');
+})
 app.get('/getCredentialForFile',function (request,response) {
     console.log("uploading");
     if (request.query.filename !== undefined && request.query.filename !== null) {

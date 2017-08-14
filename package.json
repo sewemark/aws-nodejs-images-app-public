@@ -21,9 +21,11 @@
   "region": "us-east-2",
   "dependencies": {
     "aws-sdk": "^2.95.0",
+    "body-parser": "^1.17.2",
     "crypto": "^1.0.1",
     "express": "^4.15.4",
     "node-uuid": "^1.4.8",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "pug": "^2.0.0-rc.3"
   }
 }

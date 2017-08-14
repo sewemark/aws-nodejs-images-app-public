@@ -1,0 +1,41 @@
+html
+    head
+        title= title
+        script.
+                window.onload = function () {
+
+                    init();
+                };
+                var sendSQS = '/sendSQS';
+                var operation = "resize";
+                function init() {
+
+
+                var button = document.getElementById('subbmitt-button')
+
+                button.addEventListener('click', function(event) {
+                    var checkboxes = document.getElementsByClassName("cutomCheckbox");
+                    var files=[];
+                    for(var i =0;i<checkboxes.length;i++){
+                        if(checkboxes[i].checked){
+                            files.push({file:checkboxes[i].id,operation:operation});
+                        }
+                    }
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4) {
+                            var responseDoc = xhr.responseXML;
+                        }
+                    };
+                    xhr.open('POST', sendSQS, true);
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.send(JSON.stringify(files));
+                })}
+
+    body
+        ul
+            each val, index in files
+                li=val
+                    input(type="checkbox" class="cutomCheckbox"  id=val)
+        button(id='subbmitt-button') do
+
