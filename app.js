@@ -9,10 +9,9 @@ var path = require('path');
 var bodyParser = require('body-parser')
 // Load credentials and set region from JSON file
 AWS.config.loadFromPath('./package.json');
-
 // Create S3 service object
 s3 = new AWS.S3({apiVersion: '2006-03-01'});
-
+var sqs = new AWS.SQS();
 // Call S3 to list current buckets
 s3.listBuckets(function(err, data) {
     if (err) {
@@ -50,7 +49,7 @@ app.get('/files', function (req, res) {
     });
 
 })
-var sqs = new AWS.SQS({region:'us-east-2'});
+
 
 app.post('/sendSQS',function (reqest,response) {
     console.log(reqest.body);
@@ -58,8 +57,10 @@ app.post('/sendSQS',function (reqest,response) {
 
     console.log(files.length);
     var sqsParams = {
-        MessageBody: JSON.stringify(files),
-        QueueUrl: '	https://sqs.us-east-2.amazonaws.com/810664644484/sewemarkMessageQueue'
+
+        QueueUrl: 'https://sqs.us-east-2.amazonaws.com/810664644484/image-operation',
+
+        MessageBody:JSON.stringify(files)
     };
 
     sqs.sendMessage(sqsParams, function(err, data) {
