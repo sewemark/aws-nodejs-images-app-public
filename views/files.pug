@@ -1,5 +1,6 @@
 html
     head
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css', integrity='sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M', crossorigin='anonymous')
         title= title
         script.
                 window.onload = function () {
@@ -10,6 +11,22 @@ html
                 var operation = "resize";
                 function init() {
 
+                    var button2 = document.getElementsByName('downloadButton');
+                    button2.forEach(function (downloadButton) {
+                        downloadButton.addEventListener('click', function (event) {
+                            var id = event.target.id.slice(0,event.target.id.length-6);
+                            /* var xhr = new XMLHttpRequest();
+                             xhr.onreadystatechange = function () {
+                             if (xhr.readyState == 4) {
+                             var responseDoc = xhr.responseXML;
+                             }
+                             };
+                             xhr.open('GET', '/download', true);
+                             xhr.setRequestHeader("Content-Type", "application/json");
+                             xhr.send()*/
+                            window.location = "http://localhost:55555/download?fileName="+id;
+                        });
+                    })
 
                 var button = document.getElementById('subbmitt-button')
 
@@ -18,7 +35,25 @@ html
                     var files=[];
                     for(var i =0;i<checkboxes.length;i++){
                         if(checkboxes[i].checked){
-                            files.push({file:checkboxes[i].id,operation:operation});
+                            console.log("^^^^^^^^");
+                            var next= checkboxes[i].nextSibling;
+                            console.log(next.children);
+                            var operation;
+                            var radios =  document.getElementsByName(i+"operationRadioButtons")
+                            for(var j =0;j<radios.length;j++)
+                            {
+                                    if(radios[j].checked==true)
+                                        operation = radios[j].value;
+                            };
+                            console.log(operation);
+                            var params ={};
+                            if(operation=="rotateRadio"){
+                                params.angels = document.getElementById('rotateImageAngels').value;
+                            }else{
+                                params.width = document.getElementById('resizeImageWidth').value;
+                                params.height = document.getElementById('resizeImageHeight').value;
+                            }
+                            files.push({file:checkboxes[i].id ,operation:operation, params:params});
                         }
                     }
                     var xhr = new XMLHttpRequest();
@@ -32,10 +67,57 @@ html
                     xhr.send(JSON.stringify(files));
                 })}
 
+                function operationClickHandle(item) {
+                    showHideItems(item.value);
+                }
+
+
+                function showHideItems(value) {
+                    if (value == 'resizeRadio') {
+                        var element = document.getElementById('resizeDiv');
+                        element.style.display = 'block'
+                        var element = document.getElementById('roateDiv');
+                        element.style.display = 'none'
+                    } else if (value == 'rotateRadio') {
+                        var element = document.getElementById('resizeDiv');
+                        element.style.display = 'none'
+                        var element = document.getElementById('roateDiv');
+                        element.style.display = 'block'
+                    } else {
+                        var element = document.getElementById('resizeDiv');
+                        element.style.display = 'none'
+                        var element = document.getElementById('roateDiv');
+                        element.style.display = 'none'
+                    }
+                }
+
     body
         ul
             each val, index in files
                 li=val
                     input(type="checkbox" class="cutomCheckbox"  id=val)
+                    button(name='downloadButton' id=val+'button') download
+                    div
+                        .radio
+                            label
+                                input(type='radio',  name=index+'operationRadioButtons'  value='resizeRadio' onclick="operationClickHandle(this)")
+                                | Resize
+                                div(id='resizeDiv' style="display:none")
+                                    input(type='input' id="resizeImageWidth")
+                                    label X
+                                    input(type='input' id="resizeImageHeight")
+                        .radio
+                            label
+                                input(type='radio', name=index+'operationRadioButtons'  value='rotateRadio' onclick="operationClickHandle(this)" )
+                                | Rotate
+                                div(id='roateDiv' style="display:none"  )
+                                    input(type='input' id="rotateImageAngels")
+                                    label angels
+                        .radio
+                            label
+                                input(type='radio', name=index+'operationRadioButtons', value='negativeRadio'  onclick="operationClickHandle(this)")
+                                | Negative
+
         button(id='subbmitt-button') do
+
 

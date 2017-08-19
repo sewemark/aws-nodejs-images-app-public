@@ -6,6 +6,7 @@ var config = require('./config');
 var crypto = require('crypto');
 var uuid = require('node-uuid');
 var path = require('path');
+var fs = require('fs');
 var bodyParser = require('body-parser')
 // Load credentials and set region from JSON file
 AWS.config.loadFromPath('./package.json');
@@ -57,9 +58,7 @@ app.post('/sendSQS',function (reqest,response) {
 
     console.log(files.length);
     var sqsParams = {
-
         QueueUrl: 'https://sqs.us-east-2.amazonaws.com/810664644484/image-operation',
-
         MessageBody:JSON.stringify(files)
     };
 
@@ -67,11 +66,11 @@ app.post('/sendSQS',function (reqest,response) {
         if (err) {
             console.log('ERR', err);
         }
-
         console.log(data);
     });
     response.send('OK');
-})
+});
+
 app.get('/getCredentialForFile',function (request,response) {
     console.log("uploading");
     if (request.query.filename !== undefined && request.query.filename !== null) {
@@ -84,6 +83,22 @@ app.get('/getCredentialForFile',function (request,response) {
         response.status(400).send("A Valid filename Is Needed!");
     }
 })
+
+app.get('/download', function(req, res){
+    var fileName = req.query.fileName;
+    var params = {Bucket: 'sewemarkbucket', Key: fileName};
+    s3.getObject(params, function (err, data) {
+        if(data) {
+            res.setHeader('Content-Length', data.ContentLength);
+            res.setHeader('Content-Type', 'audio/mpeg');
+            res.setHeader('Content-Disposition', 'attachment; filename=' + fileName);
+            res.write(data.Body, 'binary');
+            res.end();
+        }
+    });
+
+});
+
 var server = app.listen(55555, function() {
     console.log('Node app is running on port: ' + server.address().port);
 });
