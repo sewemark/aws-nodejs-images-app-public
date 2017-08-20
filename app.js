@@ -32,7 +32,7 @@ app.get('/files', function (req, res) {
             var mappedFiles =data.map(function (item) {
                 return item.Key;
             });
-            res.status(200).render('files', { files: mapped })
+            res.status(200).render('files', { files: mappedFiles })
         }
     });
 });

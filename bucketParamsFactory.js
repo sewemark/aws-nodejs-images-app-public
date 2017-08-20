@@ -16,5 +16,6 @@ function create() {
 }
 
 module.exports = {
-    createForFile:createForFile
+    createForFile:createForFile,
+    create:create
 };
