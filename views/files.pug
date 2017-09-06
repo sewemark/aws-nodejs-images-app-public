@@ -59,9 +59,9 @@ html(lang='en')
                                 each val, index in files
                                     tr
                                         td
-                                            input(type="checkbox" class="cutomCheckbox")
+                                            input(type="checkbox" class="cutomCheckbox"   id=val+'_operationRadioButtons')
                                         td=val
-                                            input(type="checkbox" class="cutomCheckbox"  id=val)
+
                                         td
                                             button.btn.btn-danger.btn-xs(name='deleteButton' id=val + 'button')
                                                 span.glyphicon.glyphicon-trash
@@ -72,24 +72,24 @@ html(lang='en')
                                         td
                                             .radio
                                                 label
-                                                    input(type='radio',  name=index + 'operationRadioButtons'  value='resizeRadio' onclick="operationClickHandle(this)")
+                                                    input(type='radio',  name=index + '_operationRadioButtons'  value='resizeRadio' onclick="operationClickHandle(this)")
                                                     | Resize
-                                                    div(id='resizeDiv' style="display:none")
-                                                        input(type='input' id="resizeImageWidth")
+                                                    div(id='resizeDiv'+index style="display:none")
+                                                        input(type='input' id=index+"resizeImageWidth")
                                                         label X
-                                                        input(type='input' id="resizeImageHeight")
+                                                        input(type='input' id=index+"resizeImageHeight")
                                         td
                                             .radio
                                                 label
-                                                    input(type='radio', name=index + 'operationRadioButtons'  value='rotateRadio' onclick="operationClickHandle(this)" )
+                                                    input(type='radio', name=index + '_operationRadioButtons'  value='rotateRadio' onclick="operationClickHandle(this)" )
                                                     | Rotate
-                                                    div(id='roateDiv' style="display:none"  )
-                                                        input(type='input' id="rotateImageAngels")
+                                                    div(id='roateDiv'+index style="display:none"  )
+                                                        input(type='input' id=index+"rotateImageAngels")
                                                         label angels
                                         td
                                             .radio
                                                 label
-                                                    input(type='radio', name=index + 'operationRadioButtons', value='negativeRadio'  onclick="operationClickHandle(this)")
+                                                    input(type='radio', name=index + '_operationRadioButtons', value='negativeRadio'  onclick="operationClickHandle(this)")
                                                     | Negative
             button(id='subbmitt-button' onclick="doButtonClickHandler(this)" class="btn-success") Perform operations
                 span.glyphicon.glyphicon-cloud-upload

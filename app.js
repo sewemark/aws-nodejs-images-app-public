@@ -38,18 +38,27 @@ app.get('/files', function (req, res) {
 });
 
 app.post('/sendSQS',function (reqest,response) {
+
     var files = reqest.body;
-    sqs.sendMessage(sQSParamsFactory.createParamsForFiles(JSON(stringify(files))), function(err, data) {
-        if (err) {
-            console.log('error:', err);
-            res.status(500).send('SQS can not be sent')
-        }else{
-            console.log(data);
-            response.status(200).send('SQS has been sent');
-        }
+    var errMessage = new Array();
+    var dataMaessage = new Array();
+    files.forEach(function (item) {
+        sqs.sendMessage(sQSParamsFactory.createParamsForFiles(JSON.stringify(item)), function(err, data) {
+            if(err){
+                errMessage.push(err);
+            }else{
+                dataMaessage.push(data);
+            }
+        });
+    });
 
-
-	})    
+    if (errMessage.length>0) {
+        console.log('error:', errMessage);
+        res.status(500).send('SQS can not be sent')
+    }else{
+        console.log(dataMaessage);
+        response.status(200).send('SQS has been sent');
+    }
 });
 
 app.get('/getCredentialForFile',function (req,res) {

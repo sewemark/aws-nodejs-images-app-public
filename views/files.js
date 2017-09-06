@@ -6,28 +6,30 @@ function doButtonClickHandler(event) {
             var checkboxes = document.getElementsByClassName("cutomCheckbox");
             for (var i = 0; i < checkboxes.length; i++) {
                 if (checkboxes[i].checked) {
-                    var next = checkboxes[i].nextSibling;
                     var operation;
-                    var radios = document.getElementsByName(i + "operationRadioButtons")
+                    var radios = document.getElementsByName(i.toString() + "_operationRadioButtons")
                     for (var j = 0; j < radios.length; j++) {
                         if (radios[j].checked == true)
                             operation = radios[j].value;
                     }
-                    files.push({file: checkboxes[i].id, operation: operation, params: getParams()});
+					var fileName =  checkboxes[i].id.slice(0,checkboxes[i].id.lastIndexOf('_'));
+                    files.push({file:fileName, operation: operation, params: getParams(operation,i)});
                 }
             }
             return files;
         }
-        function getParams() {
+
+        function getParams(operation,index) {
             var params = {};
             if (operation == "rotateRadio") {
-                params.angels = document.getElementById('rotateImageAngels').value;
+                params.angels = document.getElementById(index+'rotateImageAngels').value;
             } else {
-                params.width = document.getElementById('resizeImageWidth').value;
-                params.height = document.getElementById('resizeImageHeight').value;
+                params.width = document.getElementById(index+'resizeImageWidth').value;
+                params.height = document.getElementById(index+'resizeImageHeight').value;
             }
             return params;
         }
+
         function sendFilesOperation() {
             var sendSQS = '/sendSQS';
             var xhr = new XMLHttpRequest();
@@ -48,24 +50,27 @@ function downloadButtonClickHandler (button) {
 }
 
 function operationClickHandle(item) {
-    showHideItems(item.value);
+    console.log(item.name)
+    var index= item.name.slice(0,item.name.indexOf('_'));
+    console.log(index);
+    showHideItems(item.value ,index);
 }
 
-function showHideItems(value) {
+function showHideItems(value,index) {
     if (value == 'resizeRadio') {
-        var element = document.getElementById('resizeDiv');
+        var element = document.getElementById('resizeDiv' +index);
         element.style.display = 'block'
-        var element = document.getElementById('roateDiv');
+        var element = document.getElementById('roateDiv'+index);
         element.style.display = 'none'
     } else if (value == 'rotateRadio') {
-        var element = document.getElementById('resizeDiv');
+        var element = document.getElementById('resizeDiv'+index);
         element.style.display = 'none'
-        var element = document.getElementById('roateDiv');
+        var element = document.getElementById('roateDiv'+index);
         element.style.display = 'block'
     } else {
-        var element = document.getElementById('resizeDiv');
+        var element = document.getElementById('resizeDiv' + index);
         element.style.display = 'none'
-        var element = document.getElementById('roateDiv');
+        var element = document.getElementById('roateDiv'+index);
         element.style.display = 'none'
     }
 }
