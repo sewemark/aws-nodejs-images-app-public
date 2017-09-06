@@ -47,7 +47,9 @@ app.post('/sendSQS',function (reqest,response) {
             console.log(data);
             response.status(200).send('SQS has been sent');
         }
-    });
+
+
+	})    
 });
 
 app.get('/getCredentialForFile',function (req,res) {

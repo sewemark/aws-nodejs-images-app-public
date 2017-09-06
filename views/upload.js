@@ -1,10 +1,13 @@
-function submitButtonClickHandler() {
+
+	function submitButtonClickHandler(event) {
         var fileInput = document.getElementById('file_input');
         var file = fileInput.files[0];
+		console.log(file);
         if (file !== undefined && file !== null) {
             var filename = file.name;
             getCredentialForFile(filename, function (result) {
-                console.log(result);
+                console.log(result.params["x-amz-algorithm"]);
+				console.log(document.getElementById("key"));
                 document.getElementById("key").value = result.params.key;
                 document.getElementById("acl").value = result.params.acl;
                 document.getElementById("success_action_status").value = result.params.success_action_status;
@@ -13,6 +16,7 @@ function submitButtonClickHandler() {
                 document.getElementById("x-amz-credential").value = result.params["x-amz-credential"];
                 document.getElementById("x-amz-date").value = result.params["x-amz-date"];
                 document.getElementById("x-amz-signature").value = result.params["x-amz-signature"];
+				
                 uploadToS3(result);
             });
         } else {
@@ -22,6 +26,7 @@ function submitButtonClickHandler() {
 
 function uploadToS3(result) {
     var form = document.getElementById("uploadForm");
+	console.log(document.getElementById("key").value);
     var formData = new FormData(form);
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
@@ -29,7 +34,9 @@ function uploadToS3(result) {
             var responseDoc = xhr.responseXML;
         }
     };
+	console.log(result.upload_url)
     xhr.open('POST', result.upload_url, true);
+	
     xhr.send(formData);
 }
 
