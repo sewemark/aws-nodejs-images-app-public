@@ -75,4 +75,4 @@ function createHmacDigest(key, string) {
 
 module.exports = {
     getS3Credentials:getS3Credentials
-}
+};

@@ -1,88 +1,75 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Upload File</title>
-    <script>
-
-        var getCredentialForFileUrl = '/getCredentialForFile';
-        window.onload = function () {
-            init();
-        };
-        var init = function() {
-            var fileInput = document.getElementById('file_input');
-		console.log(fileInput);
-
-            var button = document.getElementById('submitt-button')
-
-            button.addEventListener('click', function(event) {
-           
-			var file = fileInput.files[0];
-				var filename = file.name;
-	        event.preventDefault();
-                var file = fileInput.files[0];
-                if (file !== undefined && file !== null) {
-                    var filename = file.name;
-                    getCredentialForFile(filename, function (result) {
-                        console.log(result);
-                        document.getElementById("key").value = result.params.key;
-                        document.getElementById("acl").value = result.params.acl;
-                        document.getElementById("success_action_status").value = result.params.success_action_status;
-                        document.getElementById("policy").value = result.params.policy;
-                        document.getElementById("x-amz-algorithm").value = result.params["x-amz-algorithm"];
-                        document.getElementById("x-amz-credential").value = result.params["x-amz-credential"];
-                        document.getElementById("x-amz-date").value = result.params["x-amz-date"];
-                        document.getElementById("x-amz-signature").value = result.params["x-amz-signature"];
-                        uploadToS3(result);
-                    });
-                } else {
-                    console.log("first upload file");
-                }
-            }, false);
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
         }
 
-        function uploadToS3(result) {
-            var form = document.getElementById("uploadForm");
-            var formData = new FormData(form);
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    var responseDoc = xhr.responseXML;
-                }
-            };
-            xhr.open('POST', result.upload_url, true);
-            xhr.send(formData);
+        footer {
+            background-color: #f2f2f2;
+            padding: 25px;
         }
-
-        function getCredentialForFile (filename, callback) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var response = xhr.responseText;
-                    response = JSON.parse(response);
-                    callback(response);
-                }
-            };
-            xhr.open("GET", getCredentialForFileUrl + "?filename=" + filename, true);
-            xhr.send();
-        }
-    </script>
+    </style>
+    <script src="upload.js"></script>
 </head>
 <body>
-<p>S3 Upload</p>
-<form id="uploadForm">
-    <input type="hidden" id="key" name="key">
-    <input type="hidden" id="acl" name="acl">
-    <input type="hidden" id="success_action_status" name="success_action_status">
-    <input type="hidden" id="policy" name="policy">
-    <input type="hidden" id="x-amz-algorithm" name="x-amz-algorithm">
-    <input type="hidden" id="x-amz-credential" name="x-amz-credential">
-    <input type="hidden" id="x-amz-date" name="x-amz-date">
-    <input type="hidden" id="x-amz-signature" name="x-amz-signature">
 
-    <input id="file_input" type="file" name="file" >
-    <input type="submit" name="btn_submit" id="submitt-button">
-    </form>
-    </body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">AWS Files storage app</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/files">Home</a></li>
+                <li><a href="/upload.html">Upload</a></li>
+                <li><a href="/files">Files</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <form id="uploadForm">
+            <input type="hidden" id="key" name="key">
+            <input type="hidden" id="acl" name="acl">
+            <input type="hidden" id="success_action_status" name="success_action_status">
+            <input type="hidden" id="policy" name="policy">
+            <input type="hidden" id="x-amz-algorithm" name="x-amz-algorithm">
+            <input type="hidden" id="x-amz-credential" name="x-amz-credential">
+            <input type="hidden" id="x-amz-date" name="x-amz-date">
+            <input type="hidden" id="x-amz-signature" name="x-amz-signature">
+            <button class="btn-primary"  onclick="document.getElementById('file_input').click();">
+                add file <span class="glyphicon glyphicon-plus-sign"></span>
+            </button>
+            <input id="file_input" style="display:none;" type="file" name="file"/>
+            <button  class="btn-success"type="buton" onclick="submitButtonClickHandler()" name="btn_submit" id="submitt-button">
+                upload
+            <span class="glyphicon glyphicon-cloud-upload"></span>
+            </button>
+        </form>
+    </div>
+</div>
+<footer class="container-fluid text-center">
+    <p>Footer Text</p>
+</footer>
+</body>
 </html>
-

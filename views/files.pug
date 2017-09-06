@@ -1,123 +1,97 @@
-html
+doctype html
+html(lang='en')
     head
-        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css', integrity='sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M', crossorigin='anonymous')
-        title= title
-        script.
-                window.onload = function () {
-
-                    init();
-                };
-                var sendSQS = '/sendSQS';
-                var operation = "resize";
-                function init() {
-
-                    var button2 = document.getElementsByName('downloadButton');
-                    button2.forEach(function (downloadButton) {
-                        downloadButton.addEventListener('click', function (event) {
-                            var id = event.target.id.slice(0,event.target.id.length-6);
-                            /* var xhr = new XMLHttpRequest();
-                             xhr.onreadystatechange = function () {
-                             if (xhr.readyState == 4) {
-                             var responseDoc = xhr.responseXML;
-                             }
-                             };
-                             xhr.open('GET', '/download', true);
-                             xhr.setRequestHeader("Content-Type", "application/json");
-                             xhr.send()*/
-                            window.location = "http://localhost:55555/download?fileName="+id;
-                        });
-                    })
-
-                var button = document.getElementById('subbmitt-button')
-
-                button.addEventListener('click', function(event) {
-                    var checkboxes = document.getElementsByClassName("cutomCheckbox");
-                    var files=[];
-                    for(var i =0;i<checkboxes.length;i++){
-                        if(checkboxes[i].checked){
-                            console.log("^^^^^^^^");
-                            var next= checkboxes[i].nextSibling;
-                            console.log(next.children);
-                            var operation;
-                            var radios =  document.getElementsByName(i+"operationRadioButtons")
-                            for(var j =0;j<radios.length;j++)
-                            {
-                                    if(radios[j].checked==true)
-                                        operation = radios[j].value;
-                            };
-                            console.log(operation);
-                            var params ={};
-                            if(operation=="rotateRadio"){
-                                params.angels = document.getElementById('rotateImageAngels').value;
-                            }else{
-                                params.width = document.getElementById('resizeImageWidth').value;
-                                params.height = document.getElementById('resizeImageHeight').value;
-                            }
-                            files.push({file:checkboxes[i].id ,operation:operation, params:params});
-                        }
-                    }
-                    var xhr = new XMLHttpRequest();
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState == 4) {
-                            var responseDoc = xhr.responseXML;
-                        }
-                    };
-                    xhr.open('POST', sendSQS, true);
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.send(JSON.stringify(files));
-                })}
-
-                function operationClickHandle(item) {
-                    showHideItems(item.value);
-                }
-
-
-                function showHideItems(value) {
-                    if (value == 'resizeRadio') {
-                        var element = document.getElementById('resizeDiv');
-                        element.style.display = 'block'
-                        var element = document.getElementById('roateDiv');
-                        element.style.display = 'none'
-                    } else if (value == 'rotateRadio') {
-                        var element = document.getElementById('resizeDiv');
-                        element.style.display = 'none'
-                        var element = document.getElementById('roateDiv');
-                        element.style.display = 'block'
-                    } else {
-                        var element = document.getElementById('resizeDiv');
-                        element.style.display = 'none'
-                        var element = document.getElementById('roateDiv');
-                        element.style.display = 'none'
-                    }
-                }
-
+        title AWS Files storage app
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+        style.
+            .navbar {
+                margin-bottom: 0;
+                border-radius: 0;
+            }
+            footer {
+                background-color: #f2f2f2;
+                padding: 25px;
+            }
+        script(src="/files.js")
     body
-        ul
-            each val, index in files
-                li=val
-                    input(type="checkbox" class="cutomCheckbox"  id=val)
-                    button(name='downloadButton' id=val+'button') download
-                    div
-                        .radio
-                            label
-                                input(type='radio',  name=index+'operationRadioButtons'  value='resizeRadio' onclick="operationClickHandle(this)")
-                                | Resize
-                                div(id='resizeDiv' style="display:none")
-                                    input(type='input' id="resizeImageWidth")
-                                    label X
-                                    input(type='input' id="resizeImageHeight")
-                        .radio
-                            label
-                                input(type='radio', name=index+'operationRadioButtons'  value='rotateRadio' onclick="operationClickHandle(this)" )
-                                | Rotate
-                                div(id='roateDiv' style="display:none"  )
-                                    input(type='input' id="rotateImageAngels")
-                                    label angels
-                        .radio
-                            label
-                                input(type='radio', name=index+'operationRadioButtons', value='negativeRadio'  onclick="operationClickHandle(this)")
-                                | Negative
+        nav.navbar.navbar-inverse
+            .container-fluid
+                .navbar-header
+                    button.navbar-toggle(type='button', data-toggle='collapse', data-target='#myNavbar')
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                    a.navbar-brand(href='#') AWS Files storage app
+                #myNavbar.collapse.navbar-collapse
+                    ul.nav.navbar-nav
+                        li.active
+                            a(href='/files') Home
+                        li
+                            a(href='/upload.html') Upload
+                        li
+                            a(href='/files') Files
+                    ul.nav.navbar-nav.navbar-right
+                        li
+                            a(href='#')
+                                span.glyphicon.glyphicon-log-in
+                                |  Login
+        .container
+            .row
+                .col-md-12
+                    h4 Files
+                    .table-responsive
+                        table#mytable.table.table-bordred.table-striped
+                            thead
+                                th
+                                    input#checkall(type='checkbox')
+                                th File Name
+                                th Delete
+                                th Download
+                                th Resize
+                                th Rename
+                                th Rotate
 
-        button(id='subbmitt-button') do
+                            tbody
+                                each val, index in files
+                                    tr
+                                        td
+                                            input(type="checkbox" class="cutomCheckbox")
+                                        td=val
+                                            input(type="checkbox" class="cutomCheckbox"  id=val)
+                                        td
+                                            button.btn.btn-danger.btn-xs(name='deleteButton' id=val + 'button')
+                                                span.glyphicon.glyphicon-trash
+                                        td
+                                            button.btn.btn-primary.btn-xs(name='downloadButton' onclick="downloadButtonClickHandler(this)" id=val + 'button')
+                                                span.glyphicon.glyphicon-download
 
-
+                                        td
+                                            .radio
+                                                label
+                                                    input(type='radio',  name=index + 'operationRadioButtons'  value='resizeRadio' onclick="operationClickHandle(this)")
+                                                    | Resize
+                                                    div(id='resizeDiv' style="display:none")
+                                                        input(type='input' id="resizeImageWidth")
+                                                        label X
+                                                        input(type='input' id="resizeImageHeight")
+                                        td
+                                            .radio
+                                                label
+                                                    input(type='radio', name=index + 'operationRadioButtons'  value='rotateRadio' onclick="operationClickHandle(this)" )
+                                                    | Rotate
+                                                    div(id='roateDiv' style="display:none"  )
+                                                        input(type='input' id="rotateImageAngels")
+                                                        label angels
+                                        td
+                                            .radio
+                                                label
+                                                    input(type='radio', name=index + 'operationRadioButtons', value='negativeRadio'  onclick="operationClickHandle(this)")
+                                                    | Negative
+            button(id='subbmitt-button' onclick="doButtonClickHandler(this)" class="btn-success") Perform operations
+                span.glyphicon.glyphicon-cloud-upload
+        footer.container-fluid.text-center
+            p AWS Files storage app
