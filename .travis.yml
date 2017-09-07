@@ -1,4 +1,8 @@
 language: node_js
+node_js:
+    - "8"
+    - "7"
+    - "6"
 deploy:
   provider: s3
   access_key_id: AKIAJWMKWOHSHPFJ7XAQ
