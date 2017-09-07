@@ -87,6 +87,21 @@ app.get('/download', function(req, res){
     });
 });
 
+app.get('/delete', function(req, res){
+    console.log("DELETE");
+    var fileName = req.query.fileName;
+    console.log(fileName);
+    s3.deleteObject(bucketParamsFactory.createForDeleteFile(fileName), function (err, data) {
+        if(err || typeof data == 'undefined' || data === null){
+            console.log(err);
+            res.status(500).send('Can not delete this file');
+        }
+        else {
+          res.status(200).send('File has been deleted');
+        }
+    });
+});
+
 var server = app.listen(config.serverPort, function() {
     console.log('Node app is running on port: ' + server.address().port);
 });

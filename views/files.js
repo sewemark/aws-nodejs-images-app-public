@@ -44,9 +44,23 @@ function doButtonClickHandler(event) {
         }
 }
 
+function deleteButtonClickHandler(button) {
+    var fileName = button.id.slice(0, button.id.length - 6);
+    var getDeleteForFileUrl = '/delete';
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            location.reload();
+        }
+    };
+    xhr.open("GET", getDeleteForFileUrl + "?fileName=" + fileName, true);
+    xhr.send();
+}
+
 function downloadButtonClickHandler (button) {
     var id = button.id.slice(0, button.id.length - 6);
-    window.location = "http://localhost:55555/download?fileName=" + id;
+    var url = document.URL.slice(0,document.URL.toString().lastIndexOf('/'));
+    window.location = url+ "/download?fileName=" + id;
 }
 
 function operationClickHandle(item) {

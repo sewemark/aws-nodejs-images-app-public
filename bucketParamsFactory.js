@@ -15,7 +15,15 @@ function create() {
     };
 }
 
+function createForDeleteFile(fileName) {
+    return{
+        Bucket: config.bucket,
+        Key: fileName
+    }
+}
+
 module.exports = {
     createForFile:createForFile,
+    createForDeleteFile:createForDeleteFile,
     create:create
 };

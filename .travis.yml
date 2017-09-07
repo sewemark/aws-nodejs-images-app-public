@@ -1,0 +1,15 @@
+language: ruby
+rvm:
+- 2.0.0
+- 1.9.3
+- jruby-19mode
+- rbx-2
+deploy:
+  provider: s3
+  access_key_id: AKIAJWMKWOHSHPFJ7XAQ
+  secret_access_key: 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
+  bucket: sewemark-deploy-web
+  upload-dir: server
+  acl: ''
+  on:
+    repo: sewemark/aws-nodejs-images-app

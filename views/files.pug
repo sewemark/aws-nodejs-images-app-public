@@ -63,7 +63,7 @@ html(lang='en')
                                         td=val
 
                                         td
-                                            button.btn.btn-danger.btn-xs(name='deleteButton' id=val + 'button')
+                                            button.btn.btn-danger.btn-xs(name='deleteButton' id=val + 'button' onclick="deleteButtonClickHandler(this)")
                                                 span.glyphicon.glyphicon-trash
                                         td
                                             button.btn.btn-primary.btn-xs(name='downloadButton' onclick="downloadButtonClickHandler(this)" id=val + 'button')
