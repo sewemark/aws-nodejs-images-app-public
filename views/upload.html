@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
     <style>
         .navbar {
             margin-bottom: 0;
@@ -59,8 +61,11 @@
             var formData = new FormData(form);
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
+                console.log("^^%%^%$^$%^$%^");
+                console.log(xhr);
+                if (xhr.readyState == 4 && ((xhr.status == 200) || (xhr.status == 201))) {
                     var responseDoc = xhr.responseXML;
+                     location.reload();
                 }
             };
             xhr.open('POST', result.upload_url, true);

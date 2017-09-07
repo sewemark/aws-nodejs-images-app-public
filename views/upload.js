@@ -1,5 +1,5 @@
 
-	function submitButtonClickHandler(event) {
+function submitButtonClickHandler(event) {
         var fileInput = document.getElementById('file_input');
         var file = fileInput.files[0];
 		console.log(file);
@@ -16,7 +16,6 @@
                 document.getElementById("x-amz-credential").value = result.params["x-amz-credential"];
                 document.getElementById("x-amz-date").value = result.params["x-amz-date"];
                 document.getElementById("x-amz-signature").value = result.params["x-amz-signature"];
-				
                 uploadToS3(result);
             });
         } else {
@@ -30,8 +29,11 @@ function uploadToS3(result) {
     var formData = new FormData(form);
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
+        console.log("CALLBACK");
+        if (xhr.readyState == 4 && ((xhr.status == 200) || (xhr.status == 2001))) {
             var responseDoc = xhr.responseXML;
+
+            location.reload();
         }
     };
 	console.log(result.upload_url)
