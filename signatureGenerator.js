@@ -33,7 +33,7 @@ function getS3Parameters(config, filename) {
             { key: filename },                                          // filename with which the uploaded file will be saved on s3
             { acl: config.acl },
             { success_action_status: config.success_action_status },
-            ["content-length-range", 0, 1000000],                       // optional: to specify the minimum and maximum upload limit
+            ["content-length-range", 0, 1000000000],                       // optional: to specify the minimum and maximum upload limit
             { "x-amz-algorithm": config["x-amz-algorithm"] },
             { "x-amz-credential": credential },
             { "x-amz-date": dateString + "T000000Z" }

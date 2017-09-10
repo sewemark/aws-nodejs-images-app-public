@@ -34,9 +34,9 @@ function doButtonClickHandler(event) {
             var sendSQS = '/sendSQS';
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4) {
-                    var responseDoc = xhr.responseXML;
-                }
+                if (xhr.readyState == 4 && xhr.status == 200) {
+					location.reload();
+				}
             };
             xhr.open('POST', sendSQS, true);
             xhr.setRequestHeader("Content-Type", "application/json");
